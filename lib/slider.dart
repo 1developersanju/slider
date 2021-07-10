@@ -89,7 +89,7 @@ class _SliderPageState extends State<SliderPage> {
             value: _value1,
             min: 0,
             max: 100,
-            divisions: 10,
+            divisions: 100,
             label: _value1.round().toString(),
             onChanged: (double value) {
               setState(() {
@@ -110,7 +110,7 @@ class _SliderPageState extends State<SliderPage> {
             values: _value2,
             min: 0,
             max: 100,
-            divisions: 10,
+            divisions: 100,
             labels: RangeLabels(
               _value2.start.round().toString(),
               _value2.end.round().toString(),
@@ -134,7 +134,7 @@ class _SliderPageState extends State<SliderPage> {
             values: _value3,
             min: 0,
             max: 100,
-            divisions: 10,
+            divisions: 100,
             labels: RangeLabels(
               _value3.start.round().toString(),
               _value3.end.round().toString(),
@@ -158,7 +158,7 @@ class _SliderPageState extends State<SliderPage> {
             values: _value4,
             min: 0,
             max: 100,
-            divisions: 10,
+            divisions: 100,
             labels: RangeLabels(
               _value4.start.round().toString(),
               _value4.end.round().toString(),
