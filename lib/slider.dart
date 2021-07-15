@@ -2,30 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class SliderPage extends StatefulWidget {
+  const SliderPage({Key? key}) : super(key: key);
   @override
   State<SliderPage> createState() => _SliderPageState();
 }
 
 class _SliderPageState extends State<SliderPage> {
-  double _value1 = 0.0;
+  double _currentRangeVal1 = 0;
+  RangeValues _currentRangeVal2 = const RangeValues(0, 0);
+  RangeValues _currentRangeVal3 = const RangeValues(0, 0);
+  RangeValues _currentRangeVal4 = const RangeValues(0, 0);
+  RangeValues _currentRangeVal5 = const RangeValues(0, 0);
+  double start2 = 0;
+  double start3 = 0;
+  double start4 = 0;
+  double start5 = 0;
 
-  RangeValues _value2 = const RangeValues(0, 0);
+  String dropdownValue = '5';
 
-  RangeValues _value3 = const RangeValues(0, 0);
-
-  RangeValues _value4 = const RangeValues(0, 0);
-
-  String dropdownValue = '1';
   void _reset() {
     setState(() {
-      _value1 = 0.0;
-
-      _value2 = const RangeValues(0, 0);
-
-      _value3 = const RangeValues(0, 0);
-
-      _value4 = const RangeValues(0, 0);
-      dropdownValue = "1";
+      _currentRangeVal1 = 0;
+      _currentRangeVal2 = const RangeValues(0, 0);
+      _currentRangeVal3 = const RangeValues(0, 0);
+      _currentRangeVal4 = const RangeValues(0, 0);
+      _currentRangeVal5 = const RangeValues(0, 0);
+      dropdownValue = dropdownValue;
     });
   }
 
@@ -67,7 +69,7 @@ class _SliderPageState extends State<SliderPage> {
                   dropdownValue = newValue!;
                 });
               },
-              items: <String>['1', '2', '3', '4']
+              items: <String>['1', '2', '3', '4', '5']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -86,17 +88,24 @@ class _SliderPageState extends State<SliderPage> {
             style: TextStyle(fontSize: 20),
           ),
           Slider(
-            value: _value1,
-            min: 0,
-            max: 100,
-            divisions: 100,
-            label: _value1.round().toString(),
-            onChanged: (double value) {
-              setState(() {
-                _value1 = value;
-              });
-            },
-          ),
+              value: _currentRangeVal1,
+              min: 0,
+              max: 100,
+              divisions: 100,
+              label: _currentRangeVal1.round().toString(),
+              onChanged: (val) {
+                print(
+                  _currentRangeVal1.round(),
+                );
+                setState(() {
+                  _currentRangeVal1 = val;
+                  start2 = val;
+                  _currentRangeVal2 = RangeValues(start2, start2);
+                  _currentRangeVal3 = RangeValues(start2, start2);
+                  _currentRangeVal4 = RangeValues(start2, start2);
+                  _currentRangeVal5 = RangeValues(start2, 100);
+                });
+              }),
           const Padding(
               padding: EdgeInsets.only(
             top: 20,
@@ -107,20 +116,29 @@ class _SliderPageState extends State<SliderPage> {
             style: TextStyle(fontSize: 20),
           ),
           RangeSlider(
-            values: _value2,
-            min: 0,
-            max: 100,
-            divisions: 100,
-            labels: RangeLabels(
-              _value2.start.round().toString(),
-              _value2.end.round().toString(),
-            ),
-            onChanged: (RangeValues values) {
-              setState(() {
-                _value2 = values;
-              });
-            },
-          ),
+              values: _currentRangeVal2,
+              min: 0,
+              max: 100,
+              divisions: 100,
+              labels: RangeLabels(
+                start2.round().toString(),
+                _currentRangeVal2.end.round().toString(),
+              ),
+              onChanged: (val) {
+                print("Value 2 : $_currentRangeVal2");
+                print(_currentRangeVal2.end.round() -
+                    _currentRangeVal2.start.round());
+                setState(() {
+                  _currentRangeVal1 = val.start;
+                  _currentRangeVal2 = val;
+                  start3 = val.end;
+                  _currentRangeVal3 =
+                      RangeValues(_currentRangeVal2.end, start3);
+                  _currentRangeVal4 =
+                      RangeValues(_currentRangeVal3.end, start3);
+                  _currentRangeVal5 = RangeValues(_currentRangeVal3.end, 100);
+                });
+              }),
           const Padding(
               padding: EdgeInsets.only(
             top: 20,
@@ -131,17 +149,23 @@ class _SliderPageState extends State<SliderPage> {
             style: TextStyle(fontSize: 20),
           ),
           RangeSlider(
-            values: _value3,
+            values: _currentRangeVal3,
             min: 0,
             max: 100,
             divisions: 100,
             labels: RangeLabels(
-              _value3.start.round().toString(),
-              _value3.end.round().toString(),
+              start3.round().toString(),
+              _currentRangeVal3.end.round().toString(),
             ),
-            onChanged: (RangeValues values) {
+            onChanged: (val) {
+              print("Value 3: $_currentRangeVal3");
+              print(_currentRangeVal3.end.round() -
+                  _currentRangeVal3.start.round());
               setState(() {
-                _value3 = values;
+                _currentRangeVal3 = val;
+                start4 = val.end;
+                _currentRangeVal4 = RangeValues(_currentRangeVal4.end, start4);
+                _currentRangeVal5 = RangeValues(_currentRangeVal4.end, 100);
               });
             },
           ),
@@ -155,22 +179,55 @@ class _SliderPageState extends State<SliderPage> {
             style: TextStyle(fontSize: 20),
           ),
           RangeSlider(
-            values: _value4,
-            min: 0,
-            max: 100,
-            divisions: 100,
-            labels: RangeLabels(
-              _value4.start.round().toString(),
-              _value4.end.round().toString(),
-            ),
-            onChanged: (RangeValues values) {
-              setState(() {
-                _value4 = values;
-              });
-            },
+              values: _currentRangeVal4,
+              min: 0,
+              max: 100,
+              divisions: 100,
+              labels: RangeLabels(
+                start4.round().toString(),
+                _currentRangeVal4.end.round().toString(),
+              ),
+              onChanged: (val) {
+                print("Value 4: $_currentRangeVal4");
+                print(_currentRangeVal4.end.round() -
+                    _currentRangeVal4.start.round());
+                print("Value 5: $_currentRangeVal5");
+                print(100 - _currentRangeVal4.end.round());
+                setState(() {
+                  _currentRangeVal4 = val;
+                  start5 = val.end;
+                  _currentRangeVal5 = RangeValues(start5, 100);
+                });
+              }),
+          const Padding(
+              padding: EdgeInsets.only(
+            top: 20,
+            bottom: 20,
+          )),
+          const Text(
+            "Person 5",
+            style: TextStyle(fontSize: 20),
           ),
+          RangeSlider(
+              values: _currentRangeVal5,
+              min: 0,
+              max: 100,
+              divisions: 100,
+              labels: RangeLabels(
+                start5.round().toString(),
+                _currentRangeVal5.end.round().toString(),
+              ),
+              onChanged: (val) {
+                print("Value 5: $_currentRangeVal5");
+                print(100 - _currentRangeVal5.start.round());
+
+                setState(() {
+                  _currentRangeVal5 = val;
+                });
+              }),
         ]),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
       floatingActionButton: FloatingActionButton.extended(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.0))),
@@ -179,7 +236,6 @@ class _SliderPageState extends State<SliderPage> {
           'Reset',
           style: TextStyle(color: Colors.black, fontSize: 20),
         ),
-        //icon: const Icon(Icons.thumb_up),
         backgroundColor: Colors.white,
       ),
     );
