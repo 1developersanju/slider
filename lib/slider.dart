@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:slider/five.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:circular_menu/circular_menu.dart';
 
 class SliderPage extends StatefulWidget {
   const SliderPage({Key? key}) : super(key: key);
@@ -58,6 +60,7 @@ class _SliderPageState extends State<SliderPage> {
             const SizedBox(
               width: 20,
             ),
+
             DropdownButton<String>(
               value: dropdownValue,
               // icon: const Icon(Icons.arrow_downward),
@@ -72,6 +75,9 @@ class _SliderPageState extends State<SliderPage> {
               items: <String>['1', '2', '3', '4', '5']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
+                  onTap: () {
+                    setState(() {});
+                  },
                   value: value,
                   child: Text(value),
                 );
@@ -98,12 +104,14 @@ class _SliderPageState extends State<SliderPage> {
                   _currentRangeVal1.round(),
                 );
                 setState(() {
-                  _currentRangeVal1 = val;
+                  _currentRangeVal1 = start2;
                   start2 = val;
                   _currentRangeVal2 = RangeValues(start2, start2);
-                  _currentRangeVal3 = RangeValues(start2, start2);
-                  _currentRangeVal4 = RangeValues(start2, start2);
-                  _currentRangeVal5 = RangeValues(start2, 100);
+                  _currentRangeVal3 =
+                      RangeValues(_currentRangeVal2.end, start2);
+                  _currentRangeVal4 =
+                      RangeValues(_currentRangeVal2.end, start2);
+                  _currentRangeVal5 = RangeValues(_currentRangeVal2.end, 100);
                 });
               }),
           const Padding(
@@ -121,7 +129,7 @@ class _SliderPageState extends State<SliderPage> {
               max: 100,
               divisions: 100,
               labels: RangeLabels(
-                start2.round().toString(),
+                _currentRangeVal2.start.round().toString(),
                 _currentRangeVal2.end.round().toString(),
               ),
               onChanged: (val) {
@@ -154,7 +162,7 @@ class _SliderPageState extends State<SliderPage> {
             max: 100,
             divisions: 100,
             labels: RangeLabels(
-              start3.round().toString(),
+              _currentRangeVal3.start.round().toString(),
               _currentRangeVal3.end.round().toString(),
             ),
             onChanged: (val) {
@@ -162,10 +170,19 @@ class _SliderPageState extends State<SliderPage> {
               print(_currentRangeVal3.end.round() -
                   _currentRangeVal3.start.round());
               setState(() {
+                _currentRangeVal2 = RangeValues(
+                    _currentRangeVal2.start, _currentRangeVal3.start);
                 _currentRangeVal3 = val;
                 start4 = val.end;
-                _currentRangeVal4 = RangeValues(_currentRangeVal4.end, start4);
-                _currentRangeVal5 = RangeValues(_currentRangeVal4.end, 100);
+                _currentRangeVal4 = RangeValues(start4, start4);
+                _currentRangeVal5 = RangeValues(start4, 100);
+              });
+              setState(() {
+                if (_currentRangeVal3.start < _currentRangeVal2.start) {
+                  _currentRangeVal2 = RangeValues(
+                      _currentRangeVal3.start, _currentRangeVal3.start);
+                  _currentRangeVal1 = _currentRangeVal3.start;
+                }
               });
             },
           ),
@@ -184,7 +201,7 @@ class _SliderPageState extends State<SliderPage> {
               max: 100,
               divisions: 100,
               labels: RangeLabels(
-                start4.round().toString(),
+                _currentRangeVal4.start.round().toString(),
                 _currentRangeVal4.end.round().toString(),
               ),
               onChanged: (val) {
@@ -192,11 +209,34 @@ class _SliderPageState extends State<SliderPage> {
                 print(_currentRangeVal4.end.round() -
                     _currentRangeVal4.start.round());
                 print("Value 5: $_currentRangeVal5");
+                print("Value 3: $_currentRangeVal3");
+                print(_currentRangeVal3.end.round() -
+                    _currentRangeVal3.start.round());
                 print(100 - _currentRangeVal4.end.round());
                 setState(() {
+                  _currentRangeVal3 = RangeValues(
+                      _currentRangeVal3.start, _currentRangeVal4.start);
                   _currentRangeVal4 = val;
                   start5 = val.end;
                   _currentRangeVal5 = RangeValues(start5, 100);
+                });
+                setState(() {
+                  if (_currentRangeVal4.start < _currentRangeVal3.start) {
+                    _currentRangeVal3 = RangeValues(
+                        _currentRangeVal4.start, _currentRangeVal4.start);
+                    _currentRangeVal2 = RangeValues(
+                        _currentRangeVal2.start, _currentRangeVal4.start);
+                    _currentRangeVal1 = _currentRangeVal2.start;
+                  }
+                });
+                setState(() {
+                  if (_currentRangeVal4.start < _currentRangeVal2.start) {
+                    _currentRangeVal3 = RangeValues(
+                        _currentRangeVal4.start, _currentRangeVal4.start);
+                    _currentRangeVal2 = RangeValues(
+                        _currentRangeVal4.start, _currentRangeVal4.start);
+                    _currentRangeVal1 = _currentRangeVal2.start;
+                  }
                 });
               }),
           const Padding(
@@ -214,7 +254,7 @@ class _SliderPageState extends State<SliderPage> {
               max: 100,
               divisions: 100,
               labels: RangeLabels(
-                start5.round().toString(),
+                _currentRangeVal5.start.round().toString(),
                 _currentRangeVal5.end.round().toString(),
               ),
               onChanged: (val) {
@@ -223,6 +263,34 @@ class _SliderPageState extends State<SliderPage> {
 
                 setState(() {
                   _currentRangeVal5 = val;
+                  _currentRangeVal4 = RangeValues(
+                      _currentRangeVal4.start, _currentRangeVal5.start);
+                });
+                setState(() {
+                  if (_currentRangeVal5.start < _currentRangeVal4.start) {
+                    _currentRangeVal3 = RangeValues(
+                        _currentRangeVal3.start, _currentRangeVal5.start);
+                         _currentRangeVal4 = RangeValues(
+                        _currentRangeVal5.start, _currentRangeVal5.start);
+                  }
+                });
+                setState(() {
+                  if (_currentRangeVal5.start < _currentRangeVal3.start) {
+                    _currentRangeVal3 = RangeValues(
+                        _currentRangeVal5.start, _currentRangeVal5.start);
+                    _currentRangeVal2 = RangeValues(
+                        _currentRangeVal2.start, _currentRangeVal5.start);
+                    _currentRangeVal1 = _currentRangeVal2.start;
+                  }
+                });
+                setState(() {
+                  if (_currentRangeVal5.start < _currentRangeVal2.start) {
+                    _currentRangeVal3 = RangeValues(
+                        _currentRangeVal5.start, _currentRangeVal5.start);
+                    _currentRangeVal2 = RangeValues(
+                        _currentRangeVal5.start, _currentRangeVal5.start);
+                    _currentRangeVal1 = _currentRangeVal2.start;
+                  }
                 });
               }),
         ]),
